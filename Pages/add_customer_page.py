@@ -2,7 +2,7 @@
 import allure
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
-from PAGES.base_page import BasePage
+from Pages.base_page import BasePage
 
 
 class AddCustomerPage(BasePage):

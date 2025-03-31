@@ -1,7 +1,8 @@
 """Этот файл отвечает за переход по вкладкам/страницам добавления клиента, списков клиентов."""
 import allure
 from selenium.webdriver.common.by import By
-from PAGES.base_page import BasePage
+
+from Pages.base_page import BasePage
 
 
 class ManagerPage(BasePage):

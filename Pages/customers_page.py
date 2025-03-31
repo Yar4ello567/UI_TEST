@@ -1,8 +1,10 @@
 """Отвечает за страницу списка клиентов"""
+from typing import List
+
 import allure
 from selenium.webdriver.common.by import By
-from typing import List
-from PAGES.base_page import BasePage
+
+from Pages.base_page import BasePage
 
 
 class CustomersPage(BasePage):

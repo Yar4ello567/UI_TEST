@@ -1,9 +1,10 @@
 import allure
-from HELPERS.customers_handler import CustomerHandler
-from HELPERS.generator import Generator
-from PAGES.add_customer_page import AddCustomerPage
-from PAGES.customers_page import CustomersPage
-from PAGES.manager_page import ManagerPage
+
+from Helpers.customers_handler import CustomerHandler
+from Helpers.generator import Generator
+from Pages.add_customer_page import AddCustomerPage
+from Pages.customers_page import CustomersPage
+from Pages.manager_page import ManagerPage
 
 
 @allure.title('Проверить функциональность добавления клиента')
