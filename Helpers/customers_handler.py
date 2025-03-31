@@ -21,3 +21,11 @@ class CustomerHandler:
         """
         closest_avg = min(names, key=lambda name: abs(len(name) - avg))
         return closest_avg
+
+    @staticmethod
+    def get_name_to_delete(names: List[str]) -> str:
+        """
+        Получает имя для удаления на основе бизнес-логики.
+        """
+        avg = CustomerHandler.get_avg_len(names)
+        return CustomerHandler.get_closest_avg(names, avg)

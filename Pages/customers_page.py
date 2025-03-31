@@ -3,6 +3,7 @@ from typing import List
 
 import allure
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 
 from Pages.base_page import BasePage
 
@@ -21,8 +22,9 @@ class CustomersPage(BasePage):
     def sort_alphabetically(self) -> None:
         """Кликает на кнопку(ссылку) имен в таблице для сортировки."""
         sort = self.find_element(*self.__sort_names)
-        sort.click()
-        sort.click()
+        assert sort.is_enabled(), "Кнопка сортировки не доступна"
+        actions = ActionChains(self.driver)
+        actions.double_click(sort).perform()
 
     @allure.step("Получить список имён.")
     def get_names(self) -> List[str]:
@@ -34,10 +36,13 @@ class CustomersPage(BasePage):
         return names
 
     @allure.step("Удалить клиента по имени.")
-    def delete_customer(self, names: List[str], name: str) -> None:
+    def delete_customer_by_name(self, name: str) -> None:
         """
-        Находит кнопку удаления клиента по имени из списка.
+        Удаляет клиента по имени.
         """
-        buttons = self.find_elements(*self.__delete_buttons)
-        position = names.index(name)
-        buttons[position].click()
+        names = self.get_names()
+        if name in names:
+            position = names.index(name)
+            buttons = self.find_elements(*self.__delete_buttons)
+            assert buttons[position].is_enabled(), "Кнопка удаления не доступна"
+            buttons[position].click()

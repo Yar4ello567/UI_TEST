@@ -1,21 +1,18 @@
 import allure
 
 from Helpers.customers_handler import CustomerHandler
-from Helpers.generator import Generator
 from Pages.add_customer_page import AddCustomerPage
 from Pages.customers_page import CustomersPage
 from Pages.manager_page import ManagerPage
 
 
 @allure.title('Проверить функциональность добавления клиента')
-def test_1(driver) -> None:
+def test_add_customer(driver, customer_data) -> None:
     manager_page = ManagerPage(driver)
     manager_page.to_add_cust()
 
-    # Добавляем пользователя с данными из генератора
     add_customer_page = AddCustomerPage(driver)
-    customer = Generator.generate_info()
-    add_customer_page.add_customer(*customer)
+    add_customer_page.add_customer(*customer_data)
     success = add_customer_page.handle_alert()
 
     assert "Customer added successfully" in success, (
@@ -23,22 +20,19 @@ def test_1(driver) -> None:
     )
 
     manager_page.to_cust()
-
-    # Следует убедиться что он и вправду добавился
     customers_page = CustomersPage(driver)
     names = customers_page.get_names()
 
-    assert customer[0] in names, (
-        f'Клиент "{customer[0]}" не найден в списке.'
+    assert customer_data[0] in names, (
+        f'Клиент "{customer_data[0]}" не найден в списке.'
     )
 
 
 @allure.title("Проверить функциональность сортировки имен в списке клиентов")
-def test_2(driver) -> None:
+def test_sort_customers(driver) -> None:
     manager_page = ManagerPage(driver)
     manager_page.to_cust()
 
-    # Сортируем список на странице, и смотрим если он отсортирован правильно
     customers_page = CustomersPage(driver)
     customers_page.sort_alphabetically()
     names = customers_page.get_names()
@@ -49,18 +43,17 @@ def test_2(driver) -> None:
 
 
 @allure.title("Проверить функциональность удаления клиентов в списке")
-def test_3(driver) -> None:
-    # Переходим в список клиентов
+def test_delete_customer(driver) -> None:
     manager_page = ManagerPage(driver)
     manager_page.to_cust()
 
-    # Находим среднее арифметическое и клиента у которого имя по длине близко к нему
     customers_page = CustomersPage(driver)
     name_list = customers_page.get_names()
-    average = CustomerHandler.get_avg_len(name_list)
-    name = CustomerHandler.get_closest_avg(name_list, average)
-    customers_page.delete_customer(name_list, name)
 
-    assert not (name in customers_page.get_names()), (
+    # Получаем имя для удаления из обработчика
+    name_to_delete = CustomerHandler.get_name_to_delete(name_list)
+    customers_page.delete_customer_by_name(name_to_delete)
+
+    assert name_to_delete not in customers_page.get_names(), (
         'Клиент не удалился из списка.'
     )

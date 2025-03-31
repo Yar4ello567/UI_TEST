@@ -11,28 +11,55 @@ class AddCustomerPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver, timeout=10)
 
-        self.__driver = driver
         self.__first_name = (By.XPATH, '//input[@placeholder="First Name"]')
         self.__last_name = (By.XPATH, '//input[@placeholder="Last Name"]')
         self.__post_code = (By.XPATH, '//input[@placeholder="Post Code"]')
         self.__add_button = (By.XPATH, '//button[@type="submit"]')
+
+    @allure.step("Ввести имя")
+    def enter_first_name(self, first_name: str) -> None:
+        """Вводит имя клиента"""
+        element = self.find_element(*self.__first_name)
+        assert element.is_enabled(), "Поле имени не доступно для ввода"
+        element.send_keys(first_name)
+
+    @allure.step("Ввести фамилию")
+    def enter_last_name(self, last_name: str) -> None:
+        """Вводит фамилию клиента"""
+        element = self.find_element(*self.__last_name)
+        assert element.is_enabled(), "Поле фамилии не доступно для ввода"
+        element.send_keys(last_name)
+
+    @allure.step("Ввести почтовый код")
+    def enter_post_code(self, post_code: str) -> None:
+        """Вводит почтовый код клиента"""
+        element = self.find_element(*self.__post_code)
+        assert element.is_enabled(), "Поле почтового кода не доступно для ввода"
+        element.send_keys(post_code)
+
+    @allure.step("Нажать кнопку добавления")
+    def click_add_button(self) -> None:
+        """Кликает на кнопку добавления клиента"""
+        element = self.find_element(*self.__add_button)
+        assert element.is_enabled(), "Кнопка добавления не доступна"
+        element.click()
 
     @allure.step("Добавить клиента.")
     def add_customer(self, first_name: str, last_name: str, post_code: str) -> None:
         """
         Добавляет клиента с заданными данными из параметров.
         """
-        self.find_element(*self.__first_name).send_keys(first_name)
-        self.find_element(*self.__last_name).send_keys(last_name)
-        self.find_element(*self.__post_code).send_keys(post_code)
-        self.find_element(*self.__add_button).click()
+        self.enter_first_name(first_name)
+        self.enter_last_name(last_name)
+        self.enter_post_code(post_code)
+        self.click_add_button()
 
     @allure.step("Проверить вывод всплывающего окна и закрыть его.")
     def handle_alert(self) -> str:
         """
         Считывание текста из всплывающего окна и его закрытие.
         """
-        alert = Alert(self.__driver)
+        alert = Alert(self.driver)
         alert_text = alert.text
         alert.accept()
         return alert_text

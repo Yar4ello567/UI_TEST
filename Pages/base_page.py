@@ -11,7 +11,7 @@ class BasePage:
     """Класс базовой страницы"""
 
     def __init__(self, driver, timeout=10):
-        self.__driver = driver
+        self.driver = driver
         self.__timeout = int(timeout)
         self.__wait = WebDriverWait(driver, timeout)
 

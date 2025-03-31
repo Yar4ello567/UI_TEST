@@ -1,4 +1,4 @@
-Практикум SDET simbirsoft: задание по UI тестированию
+Практикум SDET simbirsoft: задание по UI тестированию.
 
 Объект тестирования: https://www.globalsqa.com/angularJs-protractor/BankingProject/#/manager
 
