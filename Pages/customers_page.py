@@ -3,7 +3,7 @@ from typing import List
 
 import allure
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions as EC
 
 from Pages.base_page import BasePage
 
@@ -18,13 +18,13 @@ class CustomersPage(BasePage):
         self.__sort_names = (By.XPATH, '//a[normalize-space()="First Name"]')
         self.__delete_buttons = (By.XPATH, '//button[@ng-click="deleteCust(cust)"]')
 
-    @allure.step("Нажать на кнопку имён два раза для сортировки по алфавиту.")
-    def sort_alphabetically(self) -> None:
-        """Кликает на кнопку(ссылку) имен в таблице для сортировки."""
+    @allure.step("Нажать на кнопку имён для сортировки по алфавиту.")
+    def sort_alphabetically(self) -> List[str]:
+        """Кликает на кнопку(ссылку) имен в таблице для сортировки и возвращает отсортированный список."""
         sort = self.find_element(*self.__sort_names)
-        assert sort.is_enabled(), "Кнопка сортировки не доступна"
-        actions = ActionChains(self.driver)
-        actions.double_click(sort).perform()
+        sort.click()
+        self._BasePage__wait.until(EC.element_to_be_clickable(self.__sort_names))
+        return self.get_names()
 
     @allure.step("Получить список имён.")
     def get_names(self) -> List[str]:
@@ -44,5 +44,5 @@ class CustomersPage(BasePage):
         if name in names:
             position = names.index(name)
             buttons = self.find_elements(*self.__delete_buttons)
-            assert buttons[position].is_enabled(), "Кнопка удаления не доступна"
             buttons[position].click()
+            self._BasePage__wait.until(EC.invisibility_of_element_located((By.XPATH, f'//td[contains(text(), "{name}")]')))

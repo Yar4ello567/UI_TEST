@@ -1,6 +1,7 @@
 """Этот файл отвечает за переход по вкладкам/страницам добавления клиента, списков клиентов."""
 import allure
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 from Pages.base_page import BasePage
 
@@ -18,8 +19,10 @@ class ManagerPage(BasePage):
     def to_add_cust(self) -> None:
         """Кликает на вкладку добавления клиентов."""
         self.find_element(*self.__add_cust_btn).click()
+        self._BasePage__wait.until(EC.url_contains("addCust"))
 
     @allure.step("Перейти во вкладку списка клиентов.")
     def to_cust(self) -> None:
         """Кликает на вкладку списка клиентов."""
         self.find_element(*self.__cust_btn).click()
+        self._BasePage__wait.until(EC.url_contains("list"))

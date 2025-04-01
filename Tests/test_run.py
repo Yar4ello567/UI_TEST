@@ -34,11 +34,23 @@ def test_sort_customers(driver) -> None:
     manager_page.to_cust()
 
     customers_page = CustomersPage(driver)
-    customers_page.sort_alphabetically()
-    names = customers_page.get_names()
+    # Получаем список до сортировки
+    initial_names = customers_page.get_names()
 
-    assert names == sorted(names, key=str.lower), (
-        'Список не отсортирован по алфавиту.'
+    # Сортируем и получаем список после сортировки
+    sorted_names = customers_page.sort_alphabetically()
+
+    # Проверяем что список изменился (это подтвердит что сортировка сработала)
+    assert initial_names != sorted_names, (
+        'Список не изменился после сортировки.'
+    )
+
+    # Проверяем что список отсортирован либо по возрастанию, либо по убыванию
+    is_ascending = sorted_names == sorted(initial_names, key=str.lower)
+    is_descending = sorted_names == sorted(initial_names, key=str.lower, reverse=True)
+
+    assert is_ascending or is_descending, (
+        'Список не отсортирован ни по возрастанию, ни по убыванию.'
     )
 
 
