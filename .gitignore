@@ -1,0 +1,6 @@
+venv
+__pycache__
+allure-reports
+node_modules
+package-lock.json
+package.json
