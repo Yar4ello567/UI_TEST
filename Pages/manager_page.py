@@ -19,8 +19,7 @@ class ManagerPage(BasePage):
     def to_add_cust(self) -> None:
         """Кликает на вкладку добавления клиентов."""
         try:
-            btn = self.find_element(*self.__add_cust_btn)
-            btn.click()
+            self.wait_and_click(*self.__add_cust_btn)
             self._BasePage__wait.until(EC.url_contains("addCust"))
         except Exception as e:
             raise Exception(f"Не удалось перейти во вкладку добавления клиентов: {str(e)}")
@@ -29,8 +28,7 @@ class ManagerPage(BasePage):
     def to_cust(self) -> None:
         """Кликает на вкладку списка клиентов."""
         try:
-            btn = self.find_element(*self.__cust_btn)
-            btn.click()
+            self.wait_and_click(*self.__cust_btn)
             self._BasePage__wait.until(EC.url_contains("list"))
         except Exception as e:
             raise Exception(f"Не удалось перейти во вкладку списка клиентов: {str(e)}")

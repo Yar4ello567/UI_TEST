@@ -21,8 +21,7 @@ class CustomersPage(BasePage):
     @allure.step("Нажать на кнопку имён для сортировки по алфавиту.")
     def sort_alphabetically(self) -> List[str]:
         """Кликает на кнопку(ссылку) имен в таблице для сортировки и возвращает отсортированный список."""
-        sort = self.find_element(*self.__sort_names)
-        sort.click()
+        self.wait_and_click(*self.__sort_names)
         self._BasePage__wait.until(EC.element_to_be_clickable(self.__sort_names))
         return self.get_names()
 
@@ -44,5 +43,6 @@ class CustomersPage(BasePage):
         if name in names:
             position = names.index(name)
             buttons = self.find_elements(*self.__delete_buttons)
-            buttons[position].click()
-            self._BasePage__wait.until(EC.invisibility_of_element_located((By.XPATH, f'//td[contains(text(), "{name}")]')))
+            self.click_element(buttons[position])
+            self._BasePage__wait.until(
+                EC.invisibility_of_element_located((By.XPATH, f'//td[contains(text(), "{name}")]')))

@@ -39,8 +39,7 @@ class AddCustomerPage(BasePage):
     def click_add_button(self) -> None:
         """Кликает на кнопку добавления клиента"""
         try:
-            btn = self.find_element(*self.__add_button)
-            btn.click()
+            self.wait_and_click(*self.__add_button)
         except Exception as e:
             raise Exception(f"Не удалось нажать кнопку добавления: {str(e)}")
 
