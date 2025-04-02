@@ -35,22 +35,14 @@ class AddCustomerPage(BasePage):
         element = self.find_element(*self.__post_code)
         element.send_keys(post_code)
 
-    @allure.step("Проверить кликабельность кнопки добавления")
-    def is_add_button_clickable(self) -> bool:
-        """Проверяет, кликабельна ли кнопка добавления"""
-        try:
-            return self.find_element(*self.__add_button).is_enabled()
-        except:
-            return False
-
     @allure.step("Нажать кнопку добавления")
     def click_add_button(self) -> None:
         """Кликает на кнопку добавления клиента"""
-        if self.is_add_button_clickable():
-            element = self.find_element(*self.__add_button)
-            element.click()
-        else:
-            raise Exception("Кнопка добавления не кликабельна")
+        try:
+            btn = self.find_element(*self.__add_button)
+            btn.click()
+        except Exception as e:
+            raise Exception(f"Не удалось нажать кнопку добавления: {str(e)}")
 
     @allure.step("Добавить клиента.")
     def add_customer(self, first_name: str, last_name: str, post_code: str) -> None:
